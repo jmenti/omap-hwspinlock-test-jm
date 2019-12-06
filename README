@@ -1,0 +1,188 @@
+OMAP HwSpinlock Unit Test
+=========================
+
+This repo provides a kernel test module that performs a Linux API
+unit-test of the HwSpinlock IP on various TI SoCs. The test exercises
+only the Linux-side API, so is not really testing cross-processor
+HwSpinlock behavior.
+
+
+Build:
+------
+The module is built against a desired Linux kernel. The Linux kernel
+should be build with CONFIG_HWSPINLOCK and CONFIG_HWSPINLOCK_OMAP.
+CONFIG_HWSPINLOCK is built-in and CONFIG_HWSPINLOCK_OMAP can be
+selected to be built-in or as a module
+
+1. Select the following during kernel menuconfig and build the kernel
+Device Drivers  --->
+    [*] Hardware Spinlock drivers -->
+        --- Hardware Spinlock drivers
+        <M>   OMAP Hardware Spinlock device
+
+2. Build the test module
+	export PATH=$PATH:<cross-compiler path>
+	make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- KERNELDIR=<linux kernel rootdir>
+
+
+Usage:
+------
+Steps 1 and 4 not needed if CONFIG_HWSPINLOCK_OMAP=y
+	insmod omap_hwspinlock.ko
+	insmod omap_hwspinlock_test.ko [count=<num>]
+	rmmod omap_hwspinlock_test
+	rmmod omap_hwspinlock
+
+Following is an example output log on AM57xx:
+
+root@am57xx-evm:~#
+root@am57xx-evm:~# ls -l /sys/bus/platform/devices/ | grep spinlock
+lrwxrwxrwx    1 root     root             0 Nov 17 01:40 4a0f6000.spinlock -> ../../../devices/platform/44000000.ocp/4a000000.interconnect/4a000000.interconnect:segment@0/4a0f6000.target-module/4a0f6000.sk
+root@am57xx-evm:~# insmod omap_hwspinlock.ko
+root@am57xx-evm:~# insmod omap_hwspinlock_test.ko
+[  317.366185] omap_hwspinlock_test: loading out-of-tree module taints kernel.
+[  317.373533]
+[  317.373533] ** HwSpinLock Unit Test Module initiated **
+[  317.380565]
+[  317.380565] ***** Begin - Test All Locks ****
+[  317.386446] Testing 256 locks
+[  317.389461]
+[  317.389461] Testing lock 0
+[  317.393663] trylock #1 status[0] = 0
+[  317.397269] trylock #2 status[0] = -16
+[  317.401035] trylock after unlock status[0] = 0
+[  317.405494] trylock #1 status[1] = 0
+[  317.409098] trylock #2 status[1] = -16
+[  317.412863] trylock after unlock status[1] = 0
+[  317.417349]
+[  317.417349] Testing lock 1
+[  317.421551] trylock #1 status[0] = 0
+[  317.425138] trylock #2 status[0] = -16
+[  317.428919] trylock after unlock status[0] = 0
+[  317.433378] trylock #1 status[1] = 0
+[  317.436983] trylock #2 status[1] = -16
+[  317.440747] trylock after unlock status[1] = 0
+[  317.445210]
+[  317.445210] Testing lock 2
+[  317.449424] trylock #1 status[0] = 0
+[  317.453012] trylock #2 status[0] = -16
+[  317.456792] trylock after unlock status[0] = 0
+[  317.461254] trylock #1 status[1] = 0
+[  317.464844] trylock #2 status[1] = -16
+[  317.468627] trylock after unlock status[1] = 0
+[  317.473092]
+[  317.473092] Testing lock 3
+[  317.477309] trylock #1 status[0] = 0
+[  317.480896] trylock #2 status[0] = -16
+[  317.484661] trylock after unlock status[0] = 0
+[  317.489138] trylock #1 status[1] = 0
+[  317.492726] trylock #2 status[1] = -16
+[  317.496503] trylock after unlock status[1] = 0
+[  317.500968]
+[  317.500968] Testing lock 4
+[  317.505166] trylock #1 status[0] = 0
+[  317.508771] trylock #2 status[0] = -16
+[  317.512535] trylock after unlock status[0] = 0
+[  317.517010] trylock #1 status[1] = 0
+[  317.520596] trylock #2 status[1] = -16
+[  317.524358] trylock after unlock status[1] = 0
+[  317.528836]
+[  317.528836] Testing lock 5
+[  317.533036] trylock #1 status[0] = 0
+[  317.536642] trylock #2 status[0] = -16
+[  317.540404] trylock after unlock status[0] = 0
+[  317.544863] trylock #1 status[1] = 0
+[  317.548466] trylock #2 status[1] = -16
+[  317.552230] trylock after unlock status[1] = 0
+[  317.556706]
+[  317.556706] Testing lock 6
+[  317.560906] trylock #1 status[0] = 0
+[  317.564492] trylock #2 status[0] = -16
+[  317.568273] trylock after unlock status[0] = 0
+[  317.572734] trylock #1 status[1] = 0
+[  317.576340] trylock #2 status[1] = -16
+[  317.580105] trylock after unlock status[1] = 0
+[  317.584565]
+
+...
+...
+
+[  324.334056]
+[  324.334056] Testing lock 248
+[  324.338442] trylock #1 status[0] = 0
+[  324.342031] trylock #2 status[0] = -16
+[  324.345806] trylock after unlock status[0] = 0
+[  324.350267] trylock #1 status[1] = 0
+[  324.353854] trylock #2 status[1] = -16
+[  324.357632] trylock after unlock status[1] = 0
+[  324.362095]
+[  324.362095] Testing lock 249
+[  324.366484] trylock #1 status[0] = 0
+[  324.370071] trylock #2 status[0] = -16
+[  324.373832] trylock after unlock status[0] = 0
+[  324.378308] trylock #1 status[1] = 0
+[  324.381897] trylock #2 status[1] = -16
+[  324.385673] trylock after unlock status[1] = 0
+[  324.390133]
+[  324.390133] Testing lock 250
+[  324.394505] trylock #1 status[0] = 0
+[  324.398109] trylock #2 status[0] = -16
+[  324.401870] trylock after unlock status[0] = 0
+[  324.406346] trylock #1 status[1] = 0
+[  324.409935] trylock #2 status[1] = -16
+[  324.413696] trylock after unlock status[1] = 0
+[  324.418172]
+[  324.418172] Testing lock 251
+[  324.422543] trylock #1 status[0] = 0
+[  324.426145] trylock #2 status[0] = -16
+[  324.429909] trylock after unlock status[0] = 0
+[  324.434370] trylock #1 status[1] = 0
+[  324.437971] trylock #2 status[1] = -16
+[  324.441733] trylock after unlock status[1] = 0
+[  324.446209]
+[  324.446209] Testing lock 252
+[  324.450582] trylock #1 status[0] = 0
+[  324.454171] trylock #2 status[0] = -16
+[  324.457949] trylock after unlock status[0] = 0
+[  324.462409] trylock #1 status[1] = 0
+[  324.466010] trylock #2 status[1] = -16
+[  324.469772] trylock after unlock status[1] = 0
+[  324.474232]
+[  324.474232] Testing lock 253
+[  324.478621] trylock #1 status[0] = 0
+[  324.482210] trylock #2 status[0] = -16
+[  324.485986] trylock after unlock status[0] = 0
+[  324.490445] trylock #1 status[1] = 0
+[  324.494031] trylock #2 status[1] = -16
+[  324.497810] trylock after unlock status[1] = 0
+[  324.502273]
+[  324.502273] Testing lock 254
+[  324.506660] trylock #1 status[0] = 0
+[  324.510247] trylock #2 status[0] = -16
+[  324.514009] trylock after unlock status[0] = 0
+[  324.518486] trylock #1 status[1] = 0
+[  324.522075] trylock #2 status[1] = -16
+[  324.525850] trylock after unlock status[1] = 0
+[  324.530314]
+[  324.530314] Testing lock 255
+[  324.534686] trylock #1 status[0] = 0
+[  324.538291] trylock #2 status[0] = -16
+[  324.542052] trylock after unlock status[0] = 0
+[  324.546529] trylock #1 status[1] = 0
+[  324.550117] trylock #2 status[1] = -16
+[  324.553879] trylock after unlock status[1] = 0
+[  324.558356]
+[  324.558356] ***** End - Test All Locks ****
+[  324.564039]
+[  324.564039] ***** Begin - Test All pHandle Locks ****
+[  324.572101]
+[  324.572101] No test node provided
+[  324.576933]
+[  324.576933] ***** End - Test All pHandle Locks ****
+root@am57xx-evm:~#
+root@am57xx-evm:~# rmmod omap_hwspinlock_test
+[  334.175825]
+[  334.175825] ** HwSpinLock Unit Test Module finished **
+root@am57xx-evm:~#
+root@am57xx-evm:~# rmmod omap_hwspinlock
+root@am57xx-evm:~#

@@ -1,0 +1,12 @@
+.*
+*.dwo
+*.ko
+*.mod
+*.mod.c
+*.o
+*.o.*
+*.patch
+*.so
+Module.symvers
+modules.builtin
+modules.order
