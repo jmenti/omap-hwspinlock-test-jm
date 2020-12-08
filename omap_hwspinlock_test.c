@@ -196,6 +196,7 @@ static const struct hwspinlock_data soc_data[] = {
 	{ "ti,am654",	256, },
 	{ "ti,j721e",	256, },
 	{ "ti,j7200",	256, },
+	{ "ti,am642",	256, },
 	{ /* sentinel */ },
 };
 
