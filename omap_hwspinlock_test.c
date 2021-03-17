@@ -184,6 +184,7 @@ unsigned int omap_hwspinlock_get_locks(const struct hwspinlock_data *data)
 static const struct of_device_id omap_hwspinlock_of_match[] = {
 	{ .compatible = "ti,omap4-hwspinlock", },
 	{ .compatible = "ti,am654-hwspinlock", },
+	{ .compatible = "ti,am64-hwspinlock",  },
 	{ /* end */ },
 };
 
